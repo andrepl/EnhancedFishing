@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fish;
 import org.bukkit.entity.Item;
@@ -78,12 +79,15 @@ public class FishingListener implements Listener {
                      && player.hasPermission("enhancedfishing.enchantment.looting")) {
                  item.setItemStack(plugin.getLootTable().get(looting).getStack().clone());
              }
+
              if (fortune > 0 && plugin.isFortuneEnabled() && random.nextDouble() < fortune*0.33
                      && player.hasPermission("enhancedfishing.enchantment.fortune")) {
+                 plugin.getLogger().info("Rolling fortune");
                  ItemStack stack = item.getItemStack().clone();
                  stack.setAmount(random.nextInt(fortune+1));
                  item.setItemStack(stack);
              }
+
              if (fireaspect > 0 && item.getItemStack().getType().equals(Material.RAW_FISH) &&
                      plugin.isFireAspectEnabled() && player.hasPermission("enhancedfishing.enchantment.fireaspect")) {
                  item.setItemStack(new ItemStack(Material.COOKED_FISH, item.getItemStack().getAmount()));
@@ -100,8 +104,13 @@ public class FishingListener implements Listener {
                 chance = plugin.getConfig().getDouble("bite-chance." + perm.getName().substring(28));
             }
         }
+        
         if (hook.getBiteChance() == 1/300.0 && plugin.isRainRaisesChance()) {
             chance *= 1.666666666666666;
+        }
+
+        if (plugin.isBoatRaisesChance() && p.getVehicle() != null && p.getVehicle() instanceof Boat) {
+            chance *= 1.333;
         }
 
         if (rod != null && rod.getType().equals(Material.FISHING_ROD) && p.hasPermission("enhancedfishing.enchantment.efficiency")) {

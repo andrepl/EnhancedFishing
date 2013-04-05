@@ -21,6 +21,7 @@ public class EnhancedFishing extends JavaPlugin {
     private boolean mobsLowerChance = true;
     private boolean rainRaisesChance = true;
     private boolean lightningRaisesChance = true;
+    private boolean boatRaisesChance = true;
     private boolean efficiencyEnabled = true; // Better Odds
     private boolean lootingEnabled = true;    // Catch treasure instead of fish
     private boolean fortuneEnabled = true;    // catch multiple fish at once
@@ -48,6 +49,10 @@ public class EnhancedFishing extends JavaPlugin {
 
     public boolean isRainRaisesChance() {
         return rainRaisesChance;
+    }
+
+    public boolean isBoatRaisesChance() {
+        return boatRaisesChance;
     }
 
     public boolean isEfficiencyEnabled() {
@@ -97,6 +102,7 @@ public class EnhancedFishing extends JavaPlugin {
                 node.recalculatePermissibles();
             }
         }
+        boatRaisesChance = getConfig().getBoolean("environmental.boat", true);
         crowdingLowersChance = getConfig().getBoolean("environmental.crowding", true);
         mobsLowerChance = getConfig().getBoolean("environmental.mobs", true);
         rainRaisesChance = getConfig().getBoolean("environmental.rain", true);

@@ -36,3 +36,9 @@ emerald:
     item:
         ==: org.bukkit.inventory.ItemStack
         type: EMERALD
+diamond:
+emerald:
+    weight: 3
+    item:
+        ==: org.bukkit.inventory.ItemStack
+        type: DIAMOND
