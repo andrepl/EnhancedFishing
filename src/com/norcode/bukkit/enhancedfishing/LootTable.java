@@ -54,6 +54,7 @@ public class LootTable {
         this.random = new Random();
         this.plugin = plugin;
         this.configAccessor = new ConfigAccessor(plugin, "treasure.yml");
+        this.configAccessor.getConfig();
         this.configAccessor.saveDefaultConfig();
     }
 

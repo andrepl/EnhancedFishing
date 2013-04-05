@@ -1,8 +1,16 @@
 name: EnhancedFishing
 main: com.norcode.bukkit.enhancedfishing.EnhancedFishing
 version: 0.0.1
+commands:
+    enhancedfishing:
+        aliases: [efishing]
+        usage: /<command> reload
+        permission: enhancedfishing.admin
 permissions:
-permissions:
+    enhancedfishing.admin:
+        description: Allows reloading config file with /efishing reload.
+        default: op
+
     enhancedfishing.enchantment.*:
         description: All possible enchantments will affect the players fishing rods.
         default: true

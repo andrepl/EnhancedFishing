@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.permissions.Permission;
@@ -18,15 +20,20 @@ public class EnhancedFishing extends JavaPlugin {
     private boolean crowdingLowersChance = true;
     private boolean mobsLowerChance = true;
     private boolean rainRaisesChance = true;
+    private boolean lightningRaisesChance = true;
     private boolean efficiencyEnabled = true; // Better Odds
     private boolean lootingEnabled = true;    // Catch treasure instead of fish
     private boolean fortuneEnabled = true;    // catch multiple fish at once
     private boolean fireAspectEnabled = true; // catch cooked fish
     private boolean thornsEnabled = true;      // deal damage when hook hits mobs.
     private double chancePerEfficiencyLevel = 0.0015;
-    
+
     private LootTable lootTable;
-    
+
+    public boolean isLightningRaisesChance() {
+        return lightningRaisesChance;
+    }
+
     public double getBaseCatchChance() {
         return baseCatchChance;
     }
@@ -80,6 +87,7 @@ public class EnhancedFishing extends JavaPlugin {
             pm.removePermission(p);
         }
         loadedPermissions.clear();
+        lootTable.reload();
         baseCatchChance = getConfig().getDouble("bite-chance.default", 0.002);
         for (String nodename: getConfig().getConfigurationSection("bite-chance").getKeys(false)) {
             if (nodename != "default") {
@@ -92,6 +100,7 @@ public class EnhancedFishing extends JavaPlugin {
         crowdingLowersChance = getConfig().getBoolean("environmental.crowding", true);
         mobsLowerChance = getConfig().getBoolean("environmental.mobs", true);
         rainRaisesChance = getConfig().getBoolean("environmental.rain", true);
+        lightningRaisesChance = getConfig().getBoolean("environmental.lightning", true);
         efficiencyEnabled = getConfig().getBoolean("enchantments.efficiency", true);
         lootingEnabled = getConfig().getBoolean("enchantments.looting", true);
         fortuneEnabled = getConfig().getBoolean("enchantments.fortune", true);
@@ -114,5 +123,18 @@ public class EnhancedFishing extends JavaPlugin {
 
     public double getChancePerEfficiencyLevel() {
         return chancePerEfficiencyLevel;
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command,
+            String label, String[] args) {
+        if (args[0].toLowerCase().equals("reload")) {
+            if (sender.hasPermission("enhancedfishing.admin")) {
+                this.loadConfig();
+                sender.sendMessage("EnhancedFishing config has been reloaded from disk.");
+                return true;
+            }
+        }
+        return false;
     }
 }

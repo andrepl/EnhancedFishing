@@ -22,7 +22,7 @@ ironingot:
         ==: org.bukkit.inventory.ItemStack
         type: IRON_INGOT
 goldnugget:
-    weight:40
+    weight: 40
     item:
         ==: org.bukkit.inventory.ItemStack
         type: GOLD_NUGGET

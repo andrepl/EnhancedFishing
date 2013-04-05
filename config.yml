@@ -1,15 +1,12 @@
-
 chance-per-efficiency-level: 0.0015
-
 bite-chance:
     default: 0.002
     vip: 0.003
-
 environmental:
     crowding: true
     mobs: true
     rain: true
-
+    lightning: true
 enchantments:
     efficiency: true
     looting: true

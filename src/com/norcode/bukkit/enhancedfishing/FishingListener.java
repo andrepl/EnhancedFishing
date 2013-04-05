@@ -14,7 +14,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 
@@ -25,6 +27,31 @@ public class FishingListener implements Listener {
     public FishingListener(EnhancedFishing plugin) {
         this.plugin = plugin;
         
+    }
+
+    @EventHandler(ignoreCancelled=true, priority=EventPriority.MONITOR)
+    public void onLightningString(LightningStrikeEvent event) {
+        if (plugin.isLightningRaisesChance()) {
+            for (Entity e: event.getLightning().getNearbyEntities(6, 6, 6)) {
+                double chance;
+                if (e instanceof Fish) {
+                    chance = ((Fish) e).getBiteChance()*2.0;
+                    if (chance > 1.0) chance = 1.0;
+                    ((Fish) e).setBiteChance(chance);
+                }
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled=true, priority=EventPriority.HIGH)
+    public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Fish) {
+            Player player = (Player) ((Fish) event.getDamager()).getShooter(); 
+            if (player.getItemInHand() != null && player.getItemInHand().getType().equals(Material.FISHING_ROD)) {
+                int thorns = player.getItemInHand().getEnchantmentLevel(Enchantment.THORNS);
+                event.setDamage(thorns+2);
+            }
+        }
     }
 
     @EventHandler(ignoreCancelled=true, priority=EventPriority.HIGH)
@@ -39,7 +66,6 @@ public class FishingListener implements Listener {
                     Fish hook = playerHooks.get(player.getName());
                     if (!hook.isDead() && hook.isValid()) {
                         hook.setBiteChance(calculateBiteChance(hook));
-                        plugin.getLogger().info("Set Bite Chance to: " + hook.getBiteChance());
                     }
                 }
             }, 40);
@@ -64,7 +90,6 @@ public class FishingListener implements Listener {
              }
         } 
     }
-
 
     protected double calculateBiteChance(Fish hook) {
         Player p = (Player) hook.getShooter();
