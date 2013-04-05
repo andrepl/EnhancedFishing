@@ -1,0 +1,38 @@
+lilypad:
+    weight: 100
+    item:
+        ==: org.bukkit.inventory.ItemStack
+        type: WATER_LILY
+        amount: 1
+squidegg:
+    weight: 75
+    item:
+        ==: org.bukkit.inventory.ItemStack
+        type: MONSTER_EGG
+        damage: 94
+leatherboots:
+    weight: 50
+    item:
+        ==: org.bukkit.inventory.ItemStack
+        type: LEATHER_HELMET
+        damage: 100
+ironingot:
+    weight: 40
+    item:
+        ==: org.bukkit.inventory.ItemStack
+        type: IRON_INGOT
+goldnugget:
+    weight:40
+    item:
+        ==: org.bukkit.inventory.ItemStack
+        type: GOLD_NUGGET
+redstoneblock:
+    weight: 35
+    item:
+        ==: org.bukkit.inventory.ItemStack
+        type: REDSTONE_BLOCK
+emerald:
+    weight: 3
+    item:
+        ==: org.bukkit.inventory.ItemStack
+        type: EMERALD

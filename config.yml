@@ -1,0 +1,18 @@
+
+chance-per-efficiency-level: 0.0015
+
+bite-chance:
+    default: 0.002
+    vip: 0.003
+
+environmental:
+    crowding: true
+    mobs: true
+    rain: true
+
+enchantments:
+    efficiency: true
+    looting: true
+    fortune: true
+    flame-aspect: true
+    thorns: true

@@ -1,0 +1,14 @@
+name: EnhancedFishing
+main: com.norcode.bukkit.enhancedfishing.EnhancedFishing
+version: 0.0.1
+permissions:
+permissions:
+    enhancedfishing.enchantment.*:
+        description: All possible enchantments will affect the players fishing rods.
+        default: true
+        children:
+            enhancedfishing.enchantment.efficiency: true
+            enhancedfishing.enchantment.looting: true
+            enhancedfishing.enchantment.fortune: true
+            enhancedfishing.enchantment.thorns: true
+            enhancedfishing.enchantment.fireaspect: true
