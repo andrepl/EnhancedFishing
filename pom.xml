@@ -4,6 +4,16 @@
   <artifactId>EnhancedFishing</artifactId>
   <version>0.0.1</version>
   <build>
+    <resources>
+        <resource>
+            <directory>.</directory>
+            <includes>
+                <include>plugin.yml</include>
+                <include>config.yml</include>
+                <include>treasure.yml</include>
+            </includes>
+        </resource>
+    </resources>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>

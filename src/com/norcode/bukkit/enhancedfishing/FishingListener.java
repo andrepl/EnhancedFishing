@@ -75,22 +75,23 @@ public class FishingListener implements Listener {
              int fortune = rod.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
              int fireaspect = rod.getEnchantmentLevel(Enchantment.FIRE_ASPECT);
              Item item = (Item) event.getCaught();
-             if (looting > 0 && plugin.isLootingEnabled() && random.nextDouble() < looting * 0.2
-                     && player.hasPermission("enhancedfishing.enchantment.looting")) {
-                 item.setItemStack(plugin.getLootTable().get(looting).getStack().clone());
-             }
-
-             if (fortune > 0 && plugin.isFortuneEnabled() && random.nextDouble() < fortune*0.33
-                     && player.hasPermission("enhancedfishing.enchantment.fortune")) {
-                 plugin.getLogger().info("Rolling fortune");
-                 ItemStack stack = item.getItemStack().clone();
-                 stack.setAmount(random.nextInt(fortune+1));
-                 item.setItemStack(stack);
-             }
-
-             if (fireaspect > 0 && item.getItemStack().getType().equals(Material.RAW_FISH) &&
-                     plugin.isFireAspectEnabled() && player.hasPermission("enhancedfishing.enchantment.fireaspect")) {
-                 item.setItemStack(new ItemStack(Material.COOKED_FISH, item.getItemStack().getAmount()));
+             if (item.getItemStack() != null) {
+                 if (looting > 0 && plugin.isLootingEnabled() && random.nextDouble() < looting * 0.2
+                         && player.hasPermission("enhancedfishing.enchantment.looting")) {
+                     item.setItemStack(plugin.getLootTable().get(looting).getStack().clone());
+                 }
+    
+                 if (fortune > 0 && plugin.isFortuneEnabled() && random.nextDouble() < fortune*0.33
+                         && player.hasPermission("enhancedfishing.enchantment.fortune")) {
+                     ItemStack stack = item.getItemStack().clone();
+                     stack.setAmount(random.nextInt(fortune)+1);
+                     item.setItemStack(stack);
+                 }
+    
+                 if (fireaspect > 0 && item.getItemStack().getType().equals(Material.RAW_FISH) &&
+                         plugin.isFireAspectEnabled() && player.hasPermission("enhancedfishing.enchantment.fireaspect")) {
+                     item.setItemStack(new ItemStack(Material.COOKED_FISH, item.getItemStack().getAmount()));
+                 }
              }
         } 
     }
