@@ -17,6 +17,7 @@ public class EnhancedFishing extends JavaPlugin {
 
     private List<Permission> loadedPermissions = null;
     private double baseCatchChance = 1/500.0;
+    private boolean sunriseRaisesChance = true;
     private boolean crowdingLowersChance = true;
     private boolean mobsLowerChance = true;
     private boolean rainRaisesChance = true;
@@ -30,6 +31,10 @@ public class EnhancedFishing extends JavaPlugin {
     private double chancePerEfficiencyLevel = 0.0015;
 
     private LootTable lootTable;
+
+    public boolean isSunriseRaisesChance() {
+        return sunriseRaisesChance;
+    }
 
     public boolean isLightningRaisesChance() {
         return lightningRaisesChance;
@@ -74,6 +79,7 @@ public class EnhancedFishing extends JavaPlugin {
     public boolean isThornsEnabled() {
         return thornsEnabled;
     }
+
 
     @Override
     public void onEnable() {

@@ -108,6 +108,8 @@ public class FishingListener implements Listener {
         
         if (hook.getBiteChance() == 1/300.0 && plugin.isRainRaisesChance()) {
             chance *= 1.666666666666666;
+        } else if (plugin.isSunriseRaisesChance() && hook.getWorld().getTime() > 22300 && hook.getWorld().getTime() < 23400) {
+            chance *= 2.5;
         }
 
         if (plugin.isBoatRaisesChance() && p.getVehicle() != null && p.getVehicle() instanceof Boat) {
