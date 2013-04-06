@@ -13,16 +13,16 @@ All of these effects can be disabled globally through the admin, or by using neg
 Permissions
 ===
 
-* ##enhancedfishing.enchantment.looting## - allows use of 'Looting' enchantment
-* ##enhancedfishing.enchantment.fortune## - allows use of 'Fortune' enchantment 
-* ##enhancedfishing.enchantment.efficiency## - allows use of 'Efficiency' enchantment
-* ##enhancedfishing.enchantment.fireaspect## - allows use of 'Fire Aspect' enchantment
-* ##enhancedfishing.enchantment.thorns## - allows use of 'Thorns' enchantment
+* `enhancedfishing.enchantment.looting` - allows use of 'Looting' enchantment
+* `enhancedfishing.enchantment.fortune` - allows use of 'Fortune' enchantment 
+* `enhancedfishing.enchantment.efficiency` - allows use of 'Efficiency' enchantment
+* `enhancedfishing.enchantment.fireaspect` - allows use of 'Fire Aspect' enchantment
+* `enhancedfishing.enchantment.thorns` - allows use of 'Thorns' enchantment
 
 Commands 
 ===
 
-* ##/efishing reload## - reload config file and loot tables.
+* `/efishing reload` - reload config file and loot tables.
 
 
 Tutorial 
