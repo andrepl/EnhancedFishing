@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.Material;
+import org.bukkit.block.Biome;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
@@ -130,6 +131,13 @@ public class FishingListener implements Listener {
             } else if (e instanceof LivingEntity && !e.equals(hook.getShooter()) && e.getLocation().distance(hook.getLocation()) <= plugin.getMobRadius()) {
                 chance = plugin.getMobsModifier().apply(chance);
             }
+        }
+        
+        Biome biome = hook.getWorld().getBiome(hook.getLocation().getBlockX(), hook.getLocation().getBlockY());
+        if (biome.equals(Biome.OCEAN) || biome.equals(Biome.FROZEN_OCEAN)) {
+            chance = plugin.getBiomeOceanModifier().apply(chance);
+        } else if (biome.equals(Biome.RIVER) || biome.equals(Biome.FROZEN_RIVER)) {
+            chance = plugin.getBiomeOceanModifier().apply(chance);
         }
         return chance;
     }

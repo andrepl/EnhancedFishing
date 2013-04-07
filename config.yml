@@ -15,12 +15,13 @@ environmental:
     rain-modifier: x1.66666
     lightning-modifier: x5
     lightning-radius: 12
-
+    biome-river-modifier: x1.25
+    biome-ocean-modifier: x1.33
 enchantments:
     efficiency: true
     looting: true
-    looting-level-chance: 0.15
+    looting-level-chance: 0.1
     fortune: true
-    fortune-level-chance: 0.15
+    fortune-level-chance: 0.1
     flame-aspect: true
     thorns: true

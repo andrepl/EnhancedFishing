@@ -32,6 +32,8 @@ public class EnhancedFishing extends JavaPlugin {
 
     private DoubleModifier boatModifier = new DoubleModifier();
 
+    private DoubleModifier biomeOceanModifier = new DoubleModifier();
+    private DoubleModifier biomeRiverModifier = new DoubleModifier();
     private boolean efficiencyEnabled = true; // Better Odds
     private DoubleModifier efficiencyLevelModifier = new DoubleModifier("+0.0015");
     private boolean lootingEnabled = true;    // Catch treasure instead of fish
@@ -90,6 +92,14 @@ public class EnhancedFishing extends JavaPlugin {
 
     public DoubleModifier getBoatModifier() {
         return boatModifier;
+    }
+
+    public DoubleModifier getBiomeOceanModifier() {
+        return biomeOceanModifier;
+    }
+
+    public DoubleModifier getBiomeRiverModifier() {
+        return biomeRiverModifier;
     }
 
     public DoubleModifier getEfficiencyLevelModifier() {
@@ -162,6 +172,8 @@ public class EnhancedFishing extends JavaPlugin {
         sunriseModifier = new DoubleModifier(getConfig().getString("environmental.sunrise-modifier"));
         sunriseStart = getConfig().getDouble("environmental.sunrise-start");
         sunriseEnd = getConfig().getDouble("environmental.sunrise-end");
+        biomeOceanModifier = new DoubleModifier(getConfig().getString("environmental.biome-ocean-modifier"));
+        biomeRiverModifier = new DoubleModifier(getConfig().getString("environmental.biome-river-modifier"));
         efficiencyLevelModifier = new DoubleModifier(getConfig().getString("efficiency-level-modifier"));
         efficiencyEnabled = getConfig().getBoolean("enchantments.efficiency", true);
         lootingEnabled = getConfig().getBoolean("enchantments.looting", true);
