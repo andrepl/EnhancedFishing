@@ -15,8 +15,6 @@ environmental:
     rain-modifier: x1.66666
     lightning-modifier: x5
     lightning-radius: 12
-    biome-river-modifier: x1.25
-    biome-ocean-modifier: x1.33
 enchantments:
     efficiency: true
     looting: true
@@ -25,3 +23,12 @@ enchantments:
     fortune-level-chance: 0.1
     flame-aspect: true
     thorns: true
+
+biomes:
+    ocean: x1.4
+    river: x1.3
+    frozen_ocean: x1.4
+    frozen_river: x1.3
+    desert: x0.01
+    mushroom_shore: x1.5
+    beach: x1.25

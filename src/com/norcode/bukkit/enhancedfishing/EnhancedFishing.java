@@ -1,9 +1,11 @@
 package com.norcode.bukkit.enhancedfishing;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -32,8 +34,7 @@ public class EnhancedFishing extends JavaPlugin {
 
     private DoubleModifier boatModifier = new DoubleModifier();
 
-    private DoubleModifier biomeOceanModifier = new DoubleModifier();
-    private DoubleModifier biomeRiverModifier = new DoubleModifier();
+    private HashMap<Biome, DoubleModifier> biomeModifiers = new HashMap<Biome, DoubleModifier>();
     private boolean efficiencyEnabled = true; // Better Odds
     private DoubleModifier efficiencyLevelModifier = new DoubleModifier("+0.0015");
     private boolean lootingEnabled = true;    // Catch treasure instead of fish
@@ -94,12 +95,13 @@ public class EnhancedFishing extends JavaPlugin {
         return boatModifier;
     }
 
-    public DoubleModifier getBiomeOceanModifier() {
-        return biomeOceanModifier;
-    }
-
-    public DoubleModifier getBiomeRiverModifier() {
-        return biomeRiverModifier;
+    public DoubleModifier getBiomeModifier(Biome b) {
+        DoubleModifier mod = biomeModifiers.get(b);
+        if (mod == null) {
+            mod = new DoubleModifier();
+            biomeModifiers.put(b, mod);
+        }
+        return mod;
     }
 
     public DoubleModifier getEfficiencyLevelModifier() {
@@ -172,8 +174,6 @@ public class EnhancedFishing extends JavaPlugin {
         sunriseModifier = new DoubleModifier(getConfig().getString("environmental.sunrise-modifier"));
         sunriseStart = getConfig().getDouble("environmental.sunrise-start");
         sunriseEnd = getConfig().getDouble("environmental.sunrise-end");
-        biomeOceanModifier = new DoubleModifier(getConfig().getString("environmental.biome-ocean-modifier"));
-        biomeRiverModifier = new DoubleModifier(getConfig().getString("environmental.biome-river-modifier"));
         efficiencyLevelModifier = new DoubleModifier(getConfig().getString("efficiency-level-modifier"));
         efficiencyEnabled = getConfig().getBoolean("enchantments.efficiency", true);
         lootingEnabled = getConfig().getBoolean("enchantments.looting", true);
@@ -182,6 +182,14 @@ public class EnhancedFishing extends JavaPlugin {
         fortuneLevelChance = getConfig().getDouble("enchantments.fortune-level-chance", 0.15);
         fireAspectEnabled = getConfig().getBoolean("enchantments.fire-aspect", true);
         thornsEnabled = getConfig().getBoolean("enchantments.thorns", true);
+        for (String biomeName: getConfig().getConfigurationSection("biomes").getKeys(false)) {
+            Biome b = Biome.valueOf(biomeName.toUpperCase());
+            if (b == null) {
+                getLogger().warning("Unknown biome specified in configuration: " + biomeName);
+            } else {
+                biomeModifiers.put(b, new DoubleModifier(getConfig().getConfigurationSection("biomes").getString(biomeName)));
+            }
+        }
     }
 
     public List<Permission> getLoadedPermissions() {

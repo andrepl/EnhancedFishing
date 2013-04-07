@@ -132,13 +132,9 @@ public class FishingListener implements Listener {
                 chance = plugin.getMobsModifier().apply(chance);
             }
         }
-        
+
         Biome biome = hook.getWorld().getBiome(hook.getLocation().getBlockX(), hook.getLocation().getBlockY());
-        if (biome.equals(Biome.OCEAN) || biome.equals(Biome.FROZEN_OCEAN)) {
-            chance = plugin.getBiomeOceanModifier().apply(chance);
-        } else if (biome.equals(Biome.RIVER) || biome.equals(Biome.FROZEN_RIVER)) {
-            chance = plugin.getBiomeOceanModifier().apply(chance);
-        }
+        chance = plugin.getBiomeModifier(biome).apply(chance);
         return chance;
     }
 }
