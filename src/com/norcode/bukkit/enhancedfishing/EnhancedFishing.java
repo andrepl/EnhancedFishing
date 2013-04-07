@@ -17,51 +17,95 @@ public class EnhancedFishing extends JavaPlugin {
 
     private List<Permission> loadedPermissions = null;
     private double baseCatchChance = 1/500.0;
-    private boolean sunriseRaisesChance = true;
-    private boolean crowdingLowersChance = true;
-    private boolean mobsLowerChance = true;
-    private boolean rainRaisesChance = true;
-    private boolean lightningRaisesChance = true;
-    private boolean boatRaisesChance = true;
+    private DoubleModifier sunriseModifier = new DoubleModifier();
+    private double sunriseStart = 22400;
+    private double sunriseEnd = 23400;
+    private DoubleModifier rainModifier = new DoubleModifier();
+    private DoubleModifier crowdingModifier = new DoubleModifier();
+    private double crowdingRadius = 6;
+
+    private DoubleModifier mobsModifier = new DoubleModifier();
+    private double mobsRadius = 8;
+
+    private DoubleModifier lightningModifier = new DoubleModifier();
+    private double lightningRadius = 8;
+
+    private DoubleModifier boatModifier = new DoubleModifier();
+
     private boolean efficiencyEnabled = true; // Better Odds
+    private DoubleModifier efficiencyLevelModifier = new DoubleModifier("+0.0015");
     private boolean lootingEnabled = true;    // Catch treasure instead of fish
+    private double lootingLevelChance = 0.15;
     private boolean fortuneEnabled = true;    // catch multiple fish at once
+    private double fortuneLevelChance = 0.15;
     private boolean fireAspectEnabled = true; // catch cooked fish
     private boolean thornsEnabled = true;      // deal damage when hook hits mobs.
-    private double chancePerEfficiencyLevel = 0.0015;
 
     private LootTable lootTable;
-
-    public boolean isSunriseRaisesChance() {
-        return sunriseRaisesChance;
-    }
-
-    public boolean isLightningRaisesChance() {
-        return lightningRaisesChance;
-    }
 
     public double getBaseCatchChance() {
         return baseCatchChance;
     }
 
-    public boolean isCrowdingLowersChance() {
-        return crowdingLowersChance;
+    public DoubleModifier getSunriseModifier() {
+        return sunriseModifier;
     }
 
-    public boolean isMobsLowerChance() {
-        return mobsLowerChance;
+    public double getSunriseStart() {
+        return sunriseStart;
     }
 
-    public boolean isRainRaisesChance() {
-        return rainRaisesChance;
+    public double getSunriseEnd() {
+        return sunriseEnd;
     }
 
-    public boolean isBoatRaisesChance() {
-        return boatRaisesChance;
+    public DoubleModifier getRainModifier() {
+        return rainModifier;
+    }
+
+    public DoubleModifier getCrowdingModifier() {
+        return crowdingModifier;
+    }
+
+    public double getCrowdingRadius() {
+        return crowdingRadius;
+    }
+
+    public DoubleModifier getMobsModifier() {
+        return mobsModifier;
+    }
+
+    public double getMobRadius() {
+        return mobsRadius;
+    }
+
+    public DoubleModifier getLightningModifier() {
+        return lightningModifier;
+    }
+
+
+    public double getLightningRadius() {
+        return lightningRadius;
+   }
+
+    public DoubleModifier getBoatModifier() {
+        return boatModifier;
+    }
+
+    public DoubleModifier getEfficiencyLevelModifier() {
+        return efficiencyLevelModifier;
     }
 
     public boolean isEfficiencyEnabled() {
         return efficiencyEnabled;
+    }
+
+    public double getLootingLevelChance() {
+        return lootingLevelChance;
+    }
+
+    public double getFortuneLevelChance() {
+        return fortuneLevelChance;
     }
 
     public boolean isLootingEnabled() {
@@ -79,7 +123,6 @@ public class EnhancedFishing extends JavaPlugin {
     public boolean isThornsEnabled() {
         return thornsEnabled;
     }
-
 
     @Override
     public void onEnable() {
@@ -108,17 +151,25 @@ public class EnhancedFishing extends JavaPlugin {
                 node.recalculatePermissibles();
             }
         }
-        boatRaisesChance = getConfig().getBoolean("environmental.boat", true);
-        crowdingLowersChance = getConfig().getBoolean("environmental.crowding", true);
-        mobsLowerChance = getConfig().getBoolean("environmental.mobs", true);
-        rainRaisesChance = getConfig().getBoolean("environmental.rain", true);
-        lightningRaisesChance = getConfig().getBoolean("environmental.lightning", true);
+        boatModifier = new DoubleModifier(getConfig().getString("environmental.boat-modifier"));
+        crowdingModifier = new DoubleModifier(getConfig().getString("environmental.crowding-modifier"));
+        crowdingRadius = getConfig().getDouble("environmental.crowding-radius");
+        mobsModifier = new DoubleModifier(getConfig().getString("environmental.mobs-modifier"));
+        mobsRadius = getConfig().getDouble("environmental.mobs-radius");
+        rainModifier = new DoubleModifier(getConfig().getString("environmental.rain-modifier"));
+        lightningModifier = new DoubleModifier(getConfig().getString("environmental.lightning-modifier"));
+        lightningRadius = getConfig().getDouble("environmental.lightning-radius");
+        sunriseModifier = new DoubleModifier(getConfig().getString("environmental.sunrise-modifier"));
+        sunriseStart = getConfig().getDouble("environmental.sunrise-start");
+        sunriseEnd = getConfig().getDouble("environmental.sunrise-end");
+        efficiencyLevelModifier = new DoubleModifier(getConfig().getString("efficiency-level-modifier"));
         efficiencyEnabled = getConfig().getBoolean("enchantments.efficiency", true);
         lootingEnabled = getConfig().getBoolean("enchantments.looting", true);
+        lootingLevelChance = getConfig().getDouble("enchantments.looting-level-chance", 0.15);
         fortuneEnabled = getConfig().getBoolean("enchantments.fortune", true);
+        fortuneLevelChance = getConfig().getDouble("enchantments.fortune-level-chance", 0.15);
         fireAspectEnabled = getConfig().getBoolean("enchantments.fire-aspect", true);
         thornsEnabled = getConfig().getBoolean("enchantments.thorns", true);
-        chancePerEfficiencyLevel = getConfig().getDouble("chance-per-efficiency-level", 0.0015);
     }
 
     public List<Permission> getLoadedPermissions() {
@@ -131,10 +182,6 @@ public class EnhancedFishing extends JavaPlugin {
 
     public LootTable getLootTable() {
         return lootTable;
-    }
-
-    public double getChancePerEfficiencyLevel() {
-        return chancePerEfficiencyLevel;
     }
 
     @Override

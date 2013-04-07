@@ -1,17 +1,26 @@
-chance-per-efficiency-level: 0.0015
 bite-chance:
     default: 0.002
     vip: 0.003
+
+efficiency-level-modifier: +0.0015
 environmental:
-    sunrise: true
-    boat: true
-    crowding: true
-    mobs: true
-    rain: true
-    lightning: true
+    sunrise-modifier: x3
+    sunrise-start: 22400
+    sunrise-end: 23400
+    boat-modifier: x2
+    crowding-modifier: x0.75
+    crowding-radius: 4
+    mobs-modifier: x0.5
+    mobs-radius: 8
+    rain-modifier: x1.66666
+    lightning-modifier: x5
+    lightning-radius: 12
+
 enchantments:
     efficiency: true
     looting: true
+    looting-level-chance: 0.15
     fortune: true
+    fortune-level-chance: 0.15
     flame-aspect: true
     thorns: true

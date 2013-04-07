@@ -31,15 +31,13 @@ public class FishingListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled=true, priority=EventPriority.MONITOR)
-    public void onLightningString(LightningStrikeEvent event) {
-        if (plugin.isLightningRaisesChance()) {
-            for (Entity e: event.getLightning().getNearbyEntities(6, 6, 6)) {
-                double chance;
-                if (e instanceof Fish) {
-                    chance = ((Fish) e).getBiteChance()*2.0;
-                    if (chance > 1.0) chance = 1.0;
-                    ((Fish) e).setBiteChance(chance);
-                }
+    public void onLightningStrike(LightningStrikeEvent event) {
+        for (Entity e: event.getLightning().getNearbyEntities(plugin.getLightningRadius(), 4, plugin.getLightningRadius())) {
+            double chance;
+            if (e instanceof Fish) {
+                chance = plugin.getLightningModifier().apply(((Fish) e).getBiteChance());
+                if (chance > 1.0) chance = 1.0;
+                ((Fish) e).setBiteChance(chance);
             }
         }
     }
@@ -76,15 +74,15 @@ public class FishingListener implements Listener {
              int fireaspect = rod.getEnchantmentLevel(Enchantment.FIRE_ASPECT);
              Item item = (Item) event.getCaught();
              if (item.getItemStack() != null) {
-                 if (looting > 0 && plugin.isLootingEnabled() && random.nextDouble() < looting * 0.2
+                 if (looting > 0 && plugin.isLootingEnabled() && random.nextDouble() < Math.min(looting * plugin.getLootingLevelChance(), 1.0)
                          && player.hasPermission("enhancedfishing.enchantment.looting")) {
                      item.setItemStack(plugin.getLootTable().get(looting).getStack().clone());
                  }
     
-                 if (fortune > 0 && plugin.isFortuneEnabled() && random.nextDouble() < fortune*0.33
+                 if (fortune > 0 && plugin.isFortuneEnabled() && random.nextDouble() < Math.min(fortune * plugin.getFortuneLevelChance(), 1.0)
                          && player.hasPermission("enhancedfishing.enchantment.fortune")) {
                      ItemStack stack = item.getItemStack().clone();
-                     stack.setAmount(random.nextInt(fortune)+1);
+                     stack.setAmount(random.nextInt(Math.max(1, fortune-1))+2);
                      item.setItemStack(stack);
                  }
     
@@ -99,35 +97,38 @@ public class FishingListener implements Listener {
     protected double calculateBiteChance(Fish hook) {
         Player p = (Player) hook.getShooter();
         ItemStack rod = p.getItemInHand();
-        double chance = plugin.getConfig().getDouble("bite-chance.default", 0.002);
+        double chance = plugin.getBaseCatchChance();
         for (Permission perm: plugin.getLoadedPermissions()) {
             if (p.hasPermission(perm)) {
-                chance = plugin.getConfig().getDouble("bite-chance." + perm.getName().substring(28));
+                chance = new DoubleModifier(plugin.getConfig().getString("bite-chance." + perm.getName().substring(28))).apply(chance);
             }
         }
-        
-        if (hook.getBiteChance() == 1/300.0 && plugin.isRainRaisesChance()) {
-            chance *= 1.666666666666666;
-        } else if (plugin.isSunriseRaisesChance() && hook.getWorld().getTime() > 22300 && hook.getWorld().getTime() < 23400) {
-            chance *= 2.5;
+
+        if (hook.getBiteChance() == 1/300.0) {
+            chance = plugin.getRainModifier().apply(chance);
+        } else if (hook.getWorld().getTime() > plugin.getSunriseStart() && hook.getWorld().getTime() < plugin.getSunriseEnd()) {
+            chance = plugin.getSunriseModifier().apply(chance);
         }
 
-        if (plugin.isBoatRaisesChance() && p.getVehicle() != null && p.getVehicle() instanceof Boat) {
-            chance *= 1.333;
+        if (p.getVehicle() != null && p.getVehicle() instanceof Boat) {
+            chance = plugin.getBoatModifier().apply(chance);
         }
 
         if (rod != null && rod.getType().equals(Material.FISHING_ROD) && p.hasPermission("enhancedfishing.enchantment.efficiency")) {
             Map<Enchantment, Integer> enchantments = rod.getEnchantments();
             if (enchantments.containsKey(Enchantment.DIG_SPEED) && plugin.isEfficiencyEnabled()) {
-                chance += plugin.getChancePerEfficiencyLevel() * enchantments.get(Enchantment.DIG_SPEED);
+                for (int i=0;i<enchantments.get(Enchantment.DIG_SPEED);i++) {
+                    chance = plugin.getEfficiencyLevelModifier().apply(chance);
+                }
             }
         }
 
-        for (Entity e: hook.getNearbyEntities(6, 4, 6)) {
-            if (plugin.isCrowdingLowersChance() && e instanceof Fish && e.getLocation().distance(hook.getLocation()) <= 3) {
-                chance -= 0.0005;
-            } else if (plugin.isMobsLowerChance() && e instanceof LivingEntity && !e.equals(hook.getShooter())) {
-                chance -= 0.0005;
+        double r = Math.max(plugin.getCrowdingRadius(), plugin.getMobRadius());
+        for (Entity e: hook.getNearbyEntities(r, 4, r)) {
+            if (e instanceof Fish && e.getLocation().distance(hook.getLocation()) <= plugin.getCrowdingRadius()) {
+                chance = plugin.getCrowdingModifier().apply(chance);
+            } else if (e instanceof LivingEntity && !e.equals(hook.getShooter()) && e.getLocation().distance(hook.getLocation()) <= plugin.getMobRadius()) {
+                chance = plugin.getMobsModifier().apply(chance);
             }
         }
         return chance;
