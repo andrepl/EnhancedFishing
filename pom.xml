@@ -28,7 +28,7 @@
   </build>
   <repositories>
     <repository>
-      <id>bukkit-repo</id>
+      <id>bukkit-releases-repo</id>
       <url>http://repo.bukkit.org/content/repositories/releases/</url>
     </repository>
   </repositories>
