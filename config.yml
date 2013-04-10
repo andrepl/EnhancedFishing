@@ -1,34 +1,35 @@
-bite-chance:
-    default: 0.002
-    vip: 0.003
+default:
+    enabled: true
+    bite-chance:
+        default: 0.002
+        vip: 0.003
+    environmental:
+        sunrise-modifier: x3
+        sunrise-start: 22400
+        sunrise-end: 23400
+        boat-modifier: x2
+        crowding-modifier: x0.75
+        crowding-radius: 4
+        mobs-modifier: x0.5
+        mobs-radius: 8
+        rain-modifier: x1.66666
+        lightning-modifier: x5
+        lightning-radius: 12
+    enchantments:
+        efficiency-level-modifier: +0.0015
+        efficiency: true
+        looting: true
+        looting-level-chance: 0.1
+        fortune: true
+        fortune-level-chance: 0.1
+        flame-aspect: true
+        thorns: true
+    biomes:
+        ocean: x1.4
+        river: x1.3
+        frozen_ocean: x1.4
+        frozen_river: x1.3
+        desert: x0.01
+        mushroom_shore: x1.5
+        beach: x1.25
 
-efficiency-level-modifier: +0.0015
-environmental:
-    sunrise-modifier: x3
-    sunrise-start: 22400
-    sunrise-end: 23400
-    boat-modifier: x2
-    crowding-modifier: x0.75
-    crowding-radius: 4
-    mobs-modifier: x0.5
-    mobs-radius: 8
-    rain-modifier: x1.66666
-    lightning-modifier: x5
-    lightning-radius: 12
-enchantments:
-    efficiency: true
-    looting: true
-    looting-level-chance: 0.1
-    fortune: true
-    fortune-level-chance: 0.1
-    flame-aspect: true
-    thorns: true
-
-biomes:
-    ocean: x1.4
-    river: x1.3
-    frozen_ocean: x1.4
-    frozen_river: x1.3
-    desert: x0.01
-    mushroom_shore: x1.5
-    beach: x1.25

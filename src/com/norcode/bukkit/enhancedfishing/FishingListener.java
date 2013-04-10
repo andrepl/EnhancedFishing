@@ -33,10 +33,11 @@ public class FishingListener implements Listener {
 
     @EventHandler(ignoreCancelled=true, priority=EventPriority.MONITOR)
     public void onLightningStrike(LightningStrikeEvent event) {
-        for (Entity e: event.getLightning().getNearbyEntities(plugin.getLightningRadius(), 4, plugin.getLightningRadius())) {
+        WorldConfiguration cfg = plugin.getWorldConfiguration(event.getWorld());
+        for (Entity e: event.getLightning().getNearbyEntities(cfg.getLightningRadius(), 4, cfg.getLightningRadius())) {
             double chance;
             if (e instanceof Fish) {
-                chance = plugin.getLightningModifier().apply(((Fish) e).getBiteChance());
+                chance = cfg.getLightningModifier().apply(((Fish) e).getBiteChance());
                 if (chance > 1.0) chance = 1.0;
                 ((Fish) e).setBiteChance(chance);
             }
@@ -77,12 +78,13 @@ public class FishingListener implements Listener {
              int fireaspect = rod.getEnchantmentLevel(Enchantment.FIRE_ASPECT);
              Item item = (Item) event.getCaught();
              if (item.getItemStack() != null) {
-                 if (looting > 0 && plugin.isLootingEnabled() && random.nextDouble() < Math.min(looting * plugin.getLootingLevelChance(), 1.0)
+                 WorldConfiguration cfg = plugin.getWorldConfiguration(event.getHook().getWorld());
+                 if (looting > 0 && cfg.isLootingEnabled() && random.nextDouble() < Math.min(looting * cfg.getLootingLevelChance(), 1.0)
                          && player.hasPermission("enhancedfishing.enchantment.looting")) {
-                     item.setItemStack(plugin.getLootTable().get(looting).getStack().clone());
+                     item.setItemStack(cfg.getLootTable().get(looting).getStack().clone());
                  }
     
-                 if (fortune > 0 && plugin.isFortuneEnabled() && random.nextDouble() < Math.min(fortune * plugin.getFortuneLevelChance(), 1.0)
+                 if (fortune > 0 && cfg.isFortuneEnabled() && random.nextDouble() < Math.min(fortune * cfg.getFortuneLevelChance(), 1.0)
                          && player.hasPermission("enhancedfishing.enchantment.fortune")) {
                      ItemStack stack = item.getItemStack().clone();
                      stack.setAmount(random.nextInt(Math.max(1, fortune-1))+2);
@@ -90,7 +92,7 @@ public class FishingListener implements Listener {
                  }
     
                  if (fireaspect > 0 && item.getItemStack().getType().equals(Material.RAW_FISH) &&
-                         plugin.isFireAspectEnabled() && player.hasPermission("enhancedfishing.enchantment.fireaspect")) {
+                         cfg.isFireAspectEnabled() && player.hasPermission("enhancedfishing.enchantment.fireaspect")) {
                      item.setItemStack(new ItemStack(Material.COOKED_FISH, item.getItemStack().getAmount()));
                  }
              }
@@ -100,42 +102,38 @@ public class FishingListener implements Listener {
     protected double calculateBiteChance(Fish hook) {
         Player p = (Player) hook.getShooter();
         ItemStack rod = p.getItemInHand();
-        double chance = plugin.getBaseCatchChance();
-        for (Permission perm: plugin.getLoadedPermissions()) {
-            if (p.hasPermission(perm)) {
-                chance = new DoubleModifier(plugin.getConfig().getString("bite-chance." + perm.getName().substring(28))).apply(chance);
-            }
-        }
+        WorldConfiguration cfg = plugin.getWorldConfiguration(p.getWorld());
+        double chance = cfg.getBaseCatchChance(p);
 
         if (hook.getBiteChance() == 1/300.0) {
-            chance = plugin.getRainModifier().apply(chance);
-        } else if (hook.getWorld().getTime() > plugin.getSunriseStart() && hook.getWorld().getTime() < plugin.getSunriseEnd()) {
-            chance = plugin.getSunriseModifier().apply(chance);
+            chance = cfg.getRainModifier().apply(chance);
+        } else if (hook.getWorld().getTime() > cfg.getSunriseStart() && hook.getWorld().getTime() < cfg.getSunriseEnd()) {
+            chance = cfg.getSunriseModifier().apply(chance);
         }
 
         if (p.getVehicle() != null && p.getVehicle() instanceof Boat) {
-            chance = plugin.getBoatModifier().apply(chance);
+            chance = cfg.getBoatModifier().apply(chance);
         }
 
         if (rod != null && rod.getType().equals(Material.FISHING_ROD) && p.hasPermission("enhancedfishing.enchantment.efficiency")) {
             Map<Enchantment, Integer> enchantments = rod.getEnchantments();
-            if (enchantments.containsKey(Enchantment.DIG_SPEED) && plugin.isEfficiencyEnabled()) {
+            if (enchantments.containsKey(Enchantment.DIG_SPEED) && cfg.isEfficiencyEnabled()) {
                 for (int i=0;i<enchantments.get(Enchantment.DIG_SPEED);i++) {
-                    chance = plugin.getEfficiencyLevelModifier().apply(chance);
+                    chance = cfg.getEfficiencyLevelModifier().apply(chance);
                 }
             }
         }
 
-        double r = Math.max(plugin.getCrowdingRadius(), plugin.getMobRadius());
+        double r = Math.max(cfg.getCrowdingRadius(), cfg.getMobRadius());
         for (Entity e: hook.getNearbyEntities(r, 4, r)) {
-            if (e instanceof Fish && e.getLocation().distance(hook.getLocation()) <= plugin.getCrowdingRadius()) {
-                chance = plugin.getCrowdingModifier().apply(chance);
-            } else if (e instanceof LivingEntity && !e.equals(hook.getShooter()) && e.getLocation().distance(hook.getLocation()) <= plugin.getMobRadius()) {
-                chance = plugin.getMobsModifier().apply(chance);
+            if (e instanceof Fish && e.getLocation().distance(hook.getLocation()) <= cfg.getCrowdingRadius()) {
+                chance = cfg.getCrowdingModifier().apply(chance);
+            } else if (e instanceof LivingEntity && !e.equals(hook.getShooter()) && e.getLocation().distance(hook.getLocation()) <= cfg.getMobRadius()) {
+                chance = cfg.getMobsModifier().apply(chance);
             }
         }
         Biome biome = hook.getWorld().getBiome(hook.getLocation().getBlockX(), hook.getLocation().getBlockY());
-        chance = plugin.getBiomeModifier(biome).apply(chance);
+        chance = cfg.getBiomeModifier(biome).apply(chance);
         return chance;
     }
 }

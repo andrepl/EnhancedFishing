@@ -49,11 +49,12 @@ public class LootTable {
     private final Random random;
     private double total = 0;
     private EnhancedFishing plugin;
-    
-    public LootTable(EnhancedFishing plugin) {
+    private String world;
+    public LootTable(EnhancedFishing plugin, String world) {
+        this.world = world.toLowerCase();
         this.random = new Random();
         this.plugin = plugin;
-        this.configAccessor = new ConfigAccessor(plugin, "treasure.yml");
+        this.configAccessor = plugin.getTreasureConfig();
         this.configAccessor.getConfig();
         this.configAccessor.saveDefaultConfig();
     }
@@ -67,7 +68,6 @@ public class LootTable {
         if (weight <= 0) return;
         total += weight;
         map.put(total, new Loot(name, stack, weight));
-        plugin.getLogger().info("Added " + stack + " w/ key + " + total);
     }
 
     public Loot get(int lootingLevel) {
@@ -89,29 +89,13 @@ public class LootTable {
         ConfigurationSection cfg = null;
         for (String key: getLootConfig().getKeys(false)) {
             cfg = getLootConfig().getConfigurationSection(key);
-            add(key, cfg.getItemStack("item"), cfg.getDouble("weight"));
+            if (!cfg.contains("worlds") || cfg.getStringList("worlds").contains(world)) {
+                add(key, cfg.getItemStack("item"), cfg.getDouble("weight"));
+            }
         }
     }
 
     private ConfigurationSection getLootConfig() {
         return configAccessor.getConfig();
-    }
-
-    public void test() {
-        for (int l=1;l<=5;l++) {
-            HashMap<String, Integer> results = new HashMap<String, Integer>();
-            Loot prize = null;
-            for (int i=0;i<1000;i++) {
-                prize = get(l);
-                if (!results.containsKey(prize.getName())) {
-                    results.put(prize.getName(), 0);
-                }
-                results.put(prize.getName(), results.get(prize.getName())+1);
-            }
-            plugin.getLogger().info("LOOTING " + l);
-            for (Entry<String, Integer> e: results.entrySet()) {
-                plugin.getLogger().info(e.getKey() + "\t\t==> " + e.getValue());
-            }
-        }
     }
 }
