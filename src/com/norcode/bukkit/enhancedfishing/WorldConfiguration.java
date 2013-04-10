@@ -37,31 +37,31 @@ public class WorldConfiguration {
     private String world;
     private HashMap<Permission, Double> loadedPermissions;
     private LootTable lootTable;
-    private double baseCatchChance = 1/500.0;
-    private DoubleModifier sunriseModifier = new DoubleModifier();
-    private double sunriseStart = 22400;
-    private double sunriseEnd = 23400;
-    private DoubleModifier rainModifier = new DoubleModifier();
-    private DoubleModifier crowdingModifier = new DoubleModifier();
-    private double crowdingRadius = 6;
+    private double baseCatchChance;
+    private DoubleModifier sunriseModifier;
+    private double sunriseStart;
+    private double sunriseEnd;
+    private DoubleModifier rainModifier;
+    private DoubleModifier crowdingModifier;
+    private double crowdingRadius;
 
-    private DoubleModifier mobsModifier = new DoubleModifier();
-    private double mobsRadius = 8;
+    private DoubleModifier mobsModifier;
+    private double mobsRadius;
 
-    private DoubleModifier lightningModifier = new DoubleModifier();
-    private double lightningRadius = 8;
+    private DoubleModifier lightningModifier;
+    private double lightningRadius;
 
-    private DoubleModifier boatModifier = new DoubleModifier();
+    private DoubleModifier boatModifier;
 
     private HashMap<Biome, DoubleModifier> biomeModifiers = new HashMap<Biome, DoubleModifier>();
-    private boolean efficiencyEnabled = true; // Better Odds
-    private DoubleModifier efficiencyLevelModifier = new DoubleModifier("+0.0015");
-    private boolean lootingEnabled = true;    // Catch treasure instead of fish
-    private double lootingLevelChance = 0.15;
-    private boolean fortuneEnabled = true;    // catch multiple fish at once
-    private double fortuneLevelChance = 0.15;
-    private boolean fireAspectEnabled = true; // catch cooked fish
-    private boolean thornsEnabled = true;      // deal damage when hook hits mobs.
+    private boolean efficiencyEnabled; // Better Odds
+    private DoubleModifier efficiencyLevelModifier;
+    private boolean lootingEnabled;    // Catch treasure instead of fish
+    private double lootingLevelChance;
+    private boolean fortuneEnabled;    // catch multiple fish at once
+    private double fortuneLevelChance;
+    private boolean fireAspectEnabled; // catch cooked fish
+    private boolean thornsEnabled;      // deal damage when hook hits mobs.
 
     public WorldConfiguration(EnhancedFishing plugin, String world) {
         this.world = world;
@@ -77,6 +77,9 @@ public class WorldConfiguration {
 
     public double getBaseCatchChance(Player p) {
         double chance = getBaseCatchChance();
+        if (!this.world.equals("default")) {
+            chance = plugin.getDefaultConfiguration().getBaseCatchChance(p);
+        }
         for (Permission node: loadedPermissions.keySet()) {
             if (p.hasPermission(node)) {
                 chance = loadedPermissions.get(node);
@@ -190,16 +193,22 @@ public class WorldConfiguration {
         loadedPermissions.clear();
         lootTable.reload();
         baseCatchChance = getConfig().getDouble("bite-chance.default", getDefaultConfig().getDouble("bite-chance.default", 0.002));
-        for (String nodename: getConfig().getConfigurationSection("bite-chance").getKeys(false)) {
-            if (nodename != "default") {
-                String name = "enhancedfishing.bite-chance." + nodename.toLowerCase();
-                Permission node = pm.getPermission(name);
-                if (node == null) {
-                    node = new Permission(name,PermissionDefault.FALSE);
-                    pm.addPermission(node);
+        ConfigurationSection sec = getConfig().getConfigurationSection("bite-chance");
+        if (sec == null) {
+            sec = getDefaultConfig().getConfigurationSection("bite-chance");
+        }
+        if (sec != null) {
+            for (String nodename: sec.getKeys(false)) {
+                if (nodename != "default") {
+                    String name = "enhancedfishing.bite-chance." + nodename.toLowerCase();
+                    Permission node = pm.getPermission(name);
+                    if (node == null) {
+                        node = new Permission(name,PermissionDefault.FALSE);
+                        pm.addPermission(node);
+                    }
+                    loadedPermissions.put(node, sec.getDouble(nodename.toLowerCase()));
+                    node.recalculatePermissibles();
                 }
-                loadedPermissions.put(node, getConfig().getDouble("bite-chance." + nodename.toLowerCase()));
-                node.recalculatePermissibles();
             }
         }
         boatModifier = new DoubleModifier(getConfig().getString(ENV_MODIFIER_BOAT, getDefaultConfig().getString(ENV_MODIFIER_BOAT)));
@@ -221,12 +230,16 @@ public class WorldConfiguration {
         fortuneLevelChance = getConfig().getDouble(ENCH_FORTUNE_LEVEL_CHANCE, getDefaultConfig().getDouble(ENCH_FORTUNE_LEVEL_CHANCE, 0.15));
         fireAspectEnabled = getConfig().getBoolean(ENCH_FIRE_ASPECT_ENABLED, getDefaultConfig().getBoolean(ENCH_FIRE_ASPECT_ENABLED, true));
         thornsEnabled = getConfig().getBoolean(ENCH_THORNS_ENABLED, getDefaultConfig().getBoolean(ENCH_THORNS_ENABLED, true));
-        for (String biomeName: getConfig().getConfigurationSection("biomes").getKeys(false)) {
+        ConfigurationSection bSec = getConfig().getConfigurationSection("biomes");
+        if (bSec == null) {
+            bSec = getDefaultConfig().getConfigurationSection("biomes");
+        }
+        for (String biomeName: bSec.getKeys(false)) {
             Biome b = Biome.valueOf(biomeName.toUpperCase());
             if (b == null) {
                 plugin.getLogger().warning("Unknown biome specified in configuration for world " + world + ": " + biomeName);
             } else {
-                biomeModifiers.put(b, new DoubleModifier(getConfig().getString("biomes." + biomeName, getDefaultConfig().getString("biomes." + biomeName))));
+                biomeModifiers.put(b, new DoubleModifier(bSec.getString(biomeName, getDefaultConfig().getString("biomes." + biomeName))));
             }
         }
     }

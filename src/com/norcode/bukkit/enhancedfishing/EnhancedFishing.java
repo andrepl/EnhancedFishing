@@ -33,10 +33,12 @@ public class EnhancedFishing extends JavaPlugin {
         config.options().copyDefaults(true);
         saveConfig();
         getServer().getPluginManager().registerEvents(new FishingListener(this), this);
+        worldConfigurations = new HashMap<String, WorldConfiguration>();
         loadConfig();
     }
 
     private void loadConfig() {
+        worldConfigurations.clear();
         defaultConfiguration = new WorldConfiguration(this, "default");
         for (String key: getConfig().getKeys(false)) {
             if (!key.equals("default")) {

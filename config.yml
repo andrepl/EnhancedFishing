@@ -32,4 +32,6 @@ default:
         desert: x0.01
         mushroom_shore: x1.5
         beach: x1.25
-
+world_the_end:
+    environmental:
+        sunrise-modifier: x10

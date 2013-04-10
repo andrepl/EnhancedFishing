@@ -37,8 +37,13 @@ emerald:
         ==: org.bukkit.inventory.ItemStack
         type: EMERALD
 diamond:
-emerald:
     weight: 3
     item:
         ==: org.bukkit.inventory.ItemStack
         type: DIAMOND
+magmacream:
+    weight: 100
+    worlds: world_the_nether
+    item:
+        ==: org.bukkit.inventory.ItemStack
+        type: MAGMA_CREAM
