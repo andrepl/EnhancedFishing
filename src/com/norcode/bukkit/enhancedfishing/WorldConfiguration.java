@@ -37,6 +37,7 @@ public class WorldConfiguration {
     private String world;
     private HashMap<Permission, Double> loadedPermissions;
     private LootTable lootTable;
+    private boolean enabled;
     private double baseCatchChance;
     private DoubleModifier sunriseModifier;
     private double sunriseStart;
@@ -71,6 +72,11 @@ public class WorldConfiguration {
         this.loadConfig();
     }
 
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+    
     public double getBaseCatchChance() {
         return baseCatchChance;
     }
@@ -192,6 +198,8 @@ public class WorldConfiguration {
         }
         loadedPermissions.clear();
         lootTable.reload();
+        enabled = getConfig().getBoolean("enabled", getDefaultConfig().getBoolean("enabled", true));
+        if (!enabled) return;
         baseCatchChance = getConfig().getDouble("bite-chance.default", getDefaultConfig().getDouble("bite-chance.default", 0.002));
         ConfigurationSection sec = getConfig().getConfigurationSection("bite-chance");
         if (sec == null) {
@@ -243,4 +251,5 @@ public class WorldConfiguration {
             }
         }
     }
+
 }

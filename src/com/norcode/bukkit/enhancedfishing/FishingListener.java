@@ -34,6 +34,7 @@ public class FishingListener implements Listener {
     @EventHandler(ignoreCancelled=true, priority=EventPriority.MONITOR)
     public void onLightningStrike(LightningStrikeEvent event) {
         WorldConfiguration cfg = plugin.getWorldConfiguration(event.getWorld());
+        if (!cfg.isEnabled()) return;
         for (Entity e: event.getLightning().getNearbyEntities(cfg.getLightningRadius(), 4, cfg.getLightningRadius())) {
             double chance;
             if (e instanceof Fish) {
@@ -47,7 +48,10 @@ public class FishingListener implements Listener {
     @EventHandler(ignoreCancelled=true, priority=EventPriority.HIGH)
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Fish) {
-            Player player = (Player) ((Fish) event.getDamager()).getShooter(); 
+            Player player = (Player) ((Fish) event.getDamager()).getShooter();
+            WorldConfiguration cfg = plugin.getWorldConfiguration(player.getWorld());
+            if (!cfg.isEnabled()) return;
+            if (!cfg.isThornsEnabled()) return;
             if (player.getItemInHand() != null && player.getItemInHand().getType().equals(Material.FISHING_ROD)) {
                 int thorns = player.getItemInHand().getEnchantmentLevel(Enchantment.THORNS);
                 if (thorns > 0) {
@@ -60,6 +64,9 @@ public class FishingListener implements Listener {
     @EventHandler(ignoreCancelled=true, priority=EventPriority.HIGH)
     public void onPlayerFish(PlayerFishEvent event) {
         final Player player = event.getPlayer();
+        if (!plugin.getWorldConfiguration(player.getWorld()).isEnabled()) {
+            return;
+        }
         ItemStack rod = player.getItemInHand();
         if (event.getState().equals(PlayerFishEvent.State.FISHING)) {
             playerHooks.put(player.getName(), event.getHook());
