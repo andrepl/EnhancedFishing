@@ -49,7 +49,9 @@ public class FishingListener implements Listener {
             Player player = (Player) ((Fish) event.getDamager()).getShooter(); 
             if (player.getItemInHand() != null && player.getItemInHand().getType().equals(Material.FISHING_ROD)) {
                 int thorns = player.getItemInHand().getEnchantmentLevel(Enchantment.THORNS);
-                event.setDamage(thorns+2);
+                if (thorns > 0) {
+                    event.setDamage(thorns+2);
+                }
             }
         }
     }
