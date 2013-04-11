@@ -184,7 +184,7 @@ public class WorldConfiguration {
     }
 
     public ConfigurationSection getConfig() {
-        return plugin.getConfig().getConfigurationSection(this.world.toLowerCase());
+        return plugin.getConfig().getConfigurationSection(this.world);
     }
 
     private ConfigurationSection getDefaultConfig() {

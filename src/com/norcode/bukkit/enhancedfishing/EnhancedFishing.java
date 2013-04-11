@@ -43,13 +43,12 @@ public class EnhancedFishing extends JavaPlugin {
         for (String key: getConfig().getKeys(false)) {
             if (!key.equals("default")) {
                 getLogger().info("Loading custom world configuration for " + key);
-                String wname = key.toLowerCase();
-                World world = getServer().getWorld(wname);
+                World world = getServer().getWorld(key);
                 if (world == null) {
-                    getLogger().warning("world '" + wname + "' does not exist.");
+                    getLogger().warning("world '" + key + "' does not exist.");
                     continue;
                 }
-                worldConfigurations.put(wname, new WorldConfiguration(this, wname));
+                worldConfigurations.put(key.toLowerCase(), new WorldConfiguration(this, key));
             }
         }
     }
