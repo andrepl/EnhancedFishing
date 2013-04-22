@@ -69,6 +69,13 @@ public class FishingListener implements Listener {
         }
         ItemStack rod = player.getItemInHand();
         if (event.getState().equals(PlayerFishEvent.State.FISHING)) {
+            WorldConfiguration cfg = plugin.getWorldConfiguration(event.getHook().getWorld());
+            if (cfg.isPowerEnabled() && player.hasPermission("enhancedfishing.enchantment.power")) {
+                int power = rod.getEnchantmentLevel(Enchantment.ARROW_DAMAGE); 
+                if (power > 0) {
+                    event.getHook().setVelocity(event.getHook().getVelocity().multiply(1.0 + Math.max(0.99, (0.25*power))));
+                }
+            }
             playerHooks.put(player.getName(), event.getHook());
             plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
                 @Override

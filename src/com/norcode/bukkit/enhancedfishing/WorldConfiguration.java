@@ -32,6 +32,7 @@ public class WorldConfiguration {
     private static final String ENCH_LOOTING_ENABLED = "enchantments.looting";
     private static final String ENCH_THORNS_ENABLED = "enchantments.thorns";
     private static final String ENCH_FIRE_ASPECT_ENABLED = "enchantments.fire-aspect";
+    private static final String ENCH_POWER_ENABLED = "enchantments.power";
     
     private EnhancedFishing plugin;
     private String world;
@@ -63,7 +64,8 @@ public class WorldConfiguration {
     private double fortuneLevelChance;
     private boolean fireAspectEnabled; // catch cooked fish
     private boolean thornsEnabled;      // deal damage when hook hits mobs.
-
+    private boolean powerEnabled;
+    
     public WorldConfiguration(EnhancedFishing plugin, String world) {
         this.world = world;
         this.plugin = plugin;
@@ -142,7 +144,11 @@ public class WorldConfiguration {
     public DoubleModifier getBiomeModifier(Biome b) {
         DoubleModifier mod = biomeModifiers.get(b);
         if (mod == null) {
-            return plugin.getDefaultConfiguration().getBiomeModifier(b);
+            if (plugin.getDefaultConfiguration() != this) {
+                return plugin.getDefaultConfiguration().getBiomeModifier(b);
+            } else {
+                return new DoubleModifier();
+            }
         }
         return mod;
     }
@@ -177,6 +183,10 @@ public class WorldConfiguration {
 
     public boolean isThornsEnabled() {
         return thornsEnabled;
+    }
+
+    public boolean isPowerEnabled() {
+        return powerEnabled;
     }
 
     public LootTable getLootTable() {
@@ -238,6 +248,8 @@ public class WorldConfiguration {
         fortuneLevelChance = getConfig().getDouble(ENCH_FORTUNE_LEVEL_CHANCE, getDefaultConfig().getDouble(ENCH_FORTUNE_LEVEL_CHANCE, 0.15));
         fireAspectEnabled = getConfig().getBoolean(ENCH_FIRE_ASPECT_ENABLED, getDefaultConfig().getBoolean(ENCH_FIRE_ASPECT_ENABLED, true));
         thornsEnabled = getConfig().getBoolean(ENCH_THORNS_ENABLED, getDefaultConfig().getBoolean(ENCH_THORNS_ENABLED, true));
+        powerEnabled = getConfig().getBoolean(ENCH_POWER_ENABLED, getDefaultConfig().getBoolean(ENCH_POWER_ENABLED, true));
+        
         ConfigurationSection bSec = getConfig().getConfigurationSection("biomes");
         if (bSec == null) {
             bSec = getDefaultConfig().getConfigurationSection("biomes");

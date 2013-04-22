@@ -1,6 +1,6 @@
 name: EnhancedFishing
 main: com.norcode.bukkit.enhancedfishing.EnhancedFishing
-version: 0.0.5
+version: 0.0.6
 author: metalhedd
 softdepend: [EnhancedFishingAnvilAddon]
 commands:
@@ -22,3 +22,4 @@ permissions:
             enhancedfishing.enchantment.fortune: true
             enhancedfishing.enchantment.thorns: true
             enhancedfishing.enchantment.fireaspect: true
+            enhancedfishing.enchantment.power: true

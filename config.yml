@@ -24,6 +24,7 @@ default:
         fortune-level-chance: 0.1
         flame-aspect: true
         thorns: true
+        power: true
     biomes:
         ocean: x1.4
         river: x1.3
