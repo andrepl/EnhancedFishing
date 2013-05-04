@@ -93,18 +93,21 @@ public class FishingListener implements Listener {
              Item item = (Item) event.getCaught();
              if (item.getItemStack() != null) {
                  WorldConfiguration cfg = plugin.getWorldConfiguration(event.getHook().getWorld());
-                 if (looting > 0 && cfg.isLootingEnabled() && random.nextDouble() < Math.min(looting * cfg.getLootingLevelChance(), 1.0)
-                         && player.hasPermission("enhancedfishing.enchantment.looting")) {
-                     item.setItemStack(cfg.getLootTable().get(looting).getStack().clone());
+                 if (looting > 0) {
+                     if (cfg.isLootingEnabled() && player.hasPermission("enhancedfishing.enchantment.looting")) {
+                         if (random.nextDouble() < Math.min(looting * cfg.getLootingLevelChance(), 1.0)) {
+                            item.setItemStack(cfg.getLootTable().get(looting).getStack().clone());
+                         }
+                     }
+                 } else if (random.nextDouble() < cfg.getUnenchantedLootingChance()) {
+                     item.setItemStack(cfg.getLootTable().get(1).getStack().clone());
                  }
-    
                  if (fortune > 0 && cfg.isFortuneEnabled() && random.nextDouble() < Math.min(fortune * cfg.getFortuneLevelChance(), 1.0)
                          && player.hasPermission("enhancedfishing.enchantment.fortune")) {
                      ItemStack stack = item.getItemStack().clone();
                      stack.setAmount(random.nextInt(Math.max(1, fortune-1))+2);
                      item.setItemStack(stack);
                  }
-    
                  if (fireaspect > 0 && item.getItemStack().getType().equals(Material.RAW_FISH) &&
                          cfg.isFireAspectEnabled() && player.hasPermission("enhancedfishing.enchantment.fireaspect")) {
                      item.setItemStack(new ItemStack(Material.COOKED_FISH, item.getItemStack().getAmount()));

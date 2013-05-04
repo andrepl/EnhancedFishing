@@ -1,5 +1,6 @@
 default:
     enabled: true
+    unenchanted-looting-chance: 0
     bite-chance:
         default: 0.002
         vip: 0.003

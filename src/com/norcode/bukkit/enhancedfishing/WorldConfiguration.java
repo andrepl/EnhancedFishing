@@ -23,7 +23,7 @@ public class WorldConfiguration {
     private static final String ENV_MODIFIER_SUNRISE = "environmental.sunrise-modifier";
     private static final String ENV_CONFIG_SUNRISE_START = "environmental.sunrise-start";
     private static final String ENV_CONFIG_SUNRISE_END = "environmental.sunrise-end";
-    
+    private static final String CONFIG_UNENCHANTED_LOOTING_CHANCE = "unenchanted-looting-chance";
     private static final String ENCH_MODIFIER_EFFICIENCY_LEVEL = "enchantments.efficiency-level-modifier";
     private static final String ENCH_FORTUNE_LEVEL_CHANCE = "enchantments.fortune-level-chance";
     private static final String ENCH_LOOTING_LEVEL_CHANCE = "enchantments.looting-level-chance";
@@ -43,6 +43,7 @@ public class WorldConfiguration {
     private DoubleModifier sunriseModifier;
     private double sunriseStart;
     private double sunriseEnd;
+    private double unenchantedLootingChance;
     private DoubleModifier rainModifier;
     private DoubleModifier crowdingModifier;
     private double crowdingRadius;
@@ -153,6 +154,9 @@ public class WorldConfiguration {
         return mod;
     }
 
+    public double getUnenchantedLootingChance() {
+	return unenchantedLootingChance;
+    }
     public DoubleModifier getEfficiencyLevelModifier() {
         return efficiencyLevelModifier;
     }
@@ -240,6 +244,7 @@ public class WorldConfiguration {
         sunriseModifier = new DoubleModifier(getConfig().getString(ENV_MODIFIER_SUNRISE, getDefaultConfig().getString(ENV_MODIFIER_SUNRISE)));
         sunriseStart = getConfig().getDouble(ENV_CONFIG_SUNRISE_START, getDefaultConfig().getDouble(ENV_CONFIG_SUNRISE_START));
         sunriseEnd = getConfig().getDouble(ENV_CONFIG_SUNRISE_END, getDefaultConfig().getDouble(ENV_CONFIG_SUNRISE_END));
+        unenchantedLootingChance = getConfig().getDouble(CONFIG_UNENCHANTED_LOOTING_CHANCE, getDefaultConfig().getDouble(CONFIG_UNENCHANTED_LOOTING_CHANCE));
         efficiencyLevelModifier = new DoubleModifier(getConfig().getString(ENCH_MODIFIER_EFFICIENCY_LEVEL, getDefaultConfig().getString(ENCH_MODIFIER_EFFICIENCY_LEVEL)));
         efficiencyEnabled = getConfig().getBoolean(ENCH_EFFICIENCY_ENABLED, getDefaultConfig().getBoolean(ENCH_EFFICIENCY_ENABLED, true));
         lootingEnabled = getConfig().getBoolean(ENCH_LOOTING_ENABLED, getDefaultConfig().getBoolean(ENCH_LOOTING_ENABLED, true));

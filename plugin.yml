@@ -1,6 +1,6 @@
 name: EnhancedFishing
 main: com.norcode.bukkit.enhancedfishing.EnhancedFishing
-version: 0.0.6
+version: 0.0.7
 author: metalhedd
 softdepend: [EnhancedFishingAnvilAddon]
 commands:
