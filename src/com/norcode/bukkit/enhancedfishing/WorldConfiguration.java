@@ -1,11 +1,9 @@
 package com.norcode.bukkit.enhancedfishing;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.block.Biome;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Fish;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;

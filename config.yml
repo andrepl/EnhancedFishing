@@ -1,3 +1,5 @@
+auto-update: notify-only
+enable-anvils: true
 default:
     enabled: true
     unenchanted-looting-chance: 0

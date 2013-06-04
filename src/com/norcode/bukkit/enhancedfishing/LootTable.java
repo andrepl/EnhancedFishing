@@ -1,14 +1,9 @@
 package com.norcode.bukkit.enhancedfishing;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.Random;
-import java.util.Set;
 import java.util.TreeMap;
 
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
@@ -48,12 +43,10 @@ public class LootTable {
     private final NavigableMap<Double, Loot> map = new TreeMap<Double, Loot>();
     private final Random random;
     private double total = 0;
-    private EnhancedFishing plugin;
     private String world;
     public LootTable(EnhancedFishing plugin, String world) {
         this.world = world.toLowerCase();
         this.random = new Random();
-        this.plugin = plugin;
         this.configAccessor = plugin.getTreasureConfig();
         this.configAccessor.getConfig();
         this.configAccessor.saveDefaultConfig();
