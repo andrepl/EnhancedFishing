@@ -66,7 +66,7 @@ public class LootTable {
     public Loot get(int lootingLevel) {
         double max = 0;
         double score = 0;
-        for (int i=0;i<random.nextInt(lootingLevel/2)+1;i++) {
+        for (int i=0;i<random.nextInt((lootingLevel/2)+1);i++) {
             score = random.nextDouble() * total;
             if (score > max) max = score;
         }
