@@ -1,8 +1,7 @@
-name: EnhancedFishing
-main: com.norcode.bukkit.enhancedfishing.EnhancedFishing
-version: 0.1.1
-author: metalhedd
-softdepend: [EnhancedFishingAnvilAddon]
+name: ${project.name}
+main: ${project.main}
+version: ${project.version}
+author: ${project.authors}
 commands:
     enhancedfishing:
         aliases: [efishing]
