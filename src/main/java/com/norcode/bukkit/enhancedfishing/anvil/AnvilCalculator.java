@@ -6,12 +6,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.bukkit.craftbukkit.v1_5_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_6_R1.inventory.CraftItemStack;
 
-import net.minecraft.server.v1_5_R3.Enchantment;
-import net.minecraft.server.v1_5_R3.EnchantmentManager;
-import net.minecraft.server.v1_5_R3.Item;
-import net.minecraft.server.v1_5_R3.ItemStack;
+import net.minecraft.server.v1_6_R1.Enchantment;
+import net.minecraft.server.v1_6_R1.EnchantmentManager;
+import net.minecraft.server.v1_6_R1.Item;
+import net.minecraft.server.v1_6_R1.ItemStack;
 
 public class AnvilCalculator {
 
