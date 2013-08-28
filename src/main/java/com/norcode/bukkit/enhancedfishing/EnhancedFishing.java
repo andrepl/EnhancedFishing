@@ -56,7 +56,7 @@ public class EnhancedFishing extends JavaPlugin implements Listener {
         doUpdater();
         if (getConfig().getBoolean("enable-anvils", true)) {
             try { 
-                Class.forName("net.minecraft.server.v1_5_R3.Enchantment");
+                Class.forName("net.minecraft.server.v1_6_R2.Enchantment");
                 getServer().getPluginManager().registerEvents(new CraftingListener(this), this);
             } catch (ClassNotFoundException e) {
                 getLogger().warning("CraftBukkit version mismatch.  Anvil functionality will NOT be available.");

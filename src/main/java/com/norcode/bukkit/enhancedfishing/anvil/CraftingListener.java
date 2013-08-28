@@ -4,13 +4,13 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.server.v1_6_R1.ContainerAnvil;
-import net.minecraft.server.v1_6_R1.ContainerAnvilInventory;
+import net.minecraft.server.v1_6_R2.ContainerAnvil;
+import net.minecraft.server.v1_6_R2.ContainerAnvilInventory;
 
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_6_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_6_R1.inventory.CraftInventoryAnvil;
-import org.bukkit.craftbukkit.v1_6_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_6_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_6_R2.inventory.CraftInventoryAnvil;
+import org.bukkit.craftbukkit.v1_6_R2.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,7 +47,7 @@ public class CraftingListener implements Listener {
                     AnvilInventory ai = (AnvilInventory) event.getInventory();
                     ItemStack first = ai.getItem(0);
                     ItemStack second = ai.getItem(1);
-                    net.minecraft.server.v1_6_R1.ItemStack nmsResult = ((CraftInventoryAnvil)ai).getResultInventory().getItem(0); 
+                    net.minecraft.server.v1_6_R2.ItemStack nmsResult = ((CraftInventoryAnvil)ai).getResultInventory().getItem(0);
                     ItemStack result = nmsResult == null ? null : CraftItemStack.asCraftMirror(nmsResult); 
                     if (first != null && second != null && result == null) {
                         if (first.getType().equals(Material.FISHING_ROD) && second.getType().equals(Material.ENCHANTED_BOOK)) {
