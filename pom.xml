@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.norcode.bukkit.enhancedfishing</groupId>
   <artifactId>EnhancedFishing</artifactId>
-  <version>0.1.4</version>
+  <version>0.1.5</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.authors>metalhedd</project.authors>
