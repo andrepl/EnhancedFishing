@@ -7,6 +7,7 @@ import java.util.Set;
 import net.minecraft.server.v1_6_R2.ContainerAnvil;
 import net.minecraft.server.v1_6_R2.ContainerAnvilInventory;
 
+import net.minecraft.server.v1_6_R2.Packet24MobSpawn;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_6_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_6_R2.inventory.CraftInventoryAnvil;
