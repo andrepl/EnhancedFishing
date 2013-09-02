@@ -158,6 +158,9 @@ public class EnhancedFishing extends JavaPlugin implements Listener {
     @Override
     public boolean onCommand(CommandSender sender, Command command,
             String label, String[] args) {
+        if (args.length == 0) {
+            return false;
+        }
         if (args[0].toLowerCase().equals("reload")) {
             if (sender.hasPermission("enhancedfishing.admin")) {
                 this.loadConfig();

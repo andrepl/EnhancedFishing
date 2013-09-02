@@ -39,6 +39,7 @@ public class CraftingListener implements Listener {
         if (!cfg.isEnabled()) {
             return;
         }
+
         plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
             @Override
             public void run() {
